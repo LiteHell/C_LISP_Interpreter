@@ -152,6 +152,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C_LISP_Interpreter.c" />
+    <ClCompile Include="lisp.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lisp.tab.c" />
+    <ClCompile Include="lisp.yy.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lisp.tab.h" />
+    <ClInclude Include="lisp.yy.h" />
+    <ClInclude Include="parsedef.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

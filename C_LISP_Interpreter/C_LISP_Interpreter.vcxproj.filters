@@ -18,5 +18,25 @@
     <ClCompile Include="C_LISP_Interpreter.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="lisp.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="lisp.tab.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="lisp.yy.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="parsedef.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp.tab.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp.yy.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
