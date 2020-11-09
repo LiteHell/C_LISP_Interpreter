@@ -1,3 +1,6 @@
+#ifndef _H_PARSEDEF
+#define _H_PARSEDEF
+
 typedef enum {
 	NUMBER,
 	SYMBOL,
@@ -35,3 +38,4 @@ typedef union obj_t {
 		list_t list;
 	} any;
 } obj_t;
+#endif
