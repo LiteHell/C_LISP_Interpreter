@@ -51,6 +51,7 @@ lisp.yy.* 파일은 lisp.l 파일에 flex를, lisp.tab.* 파일은 lisp.y 파일
 #include "parsedef.h"
 #include "lisp.yy.h"
 #include "lisp.tab.h"
+#include "lisp_processor.h"
 
 void lisp_debug(obj_t const* const result, int indent) {
 	for (int i = 0; i < 4 * indent; i++)
@@ -97,6 +98,10 @@ void lisp_debug(obj_t const* const result, int indent) {
 }
 
 int main() {
+//#define PARSER_DEBUG
+#ifdef PARSER_DEBUG
+	// Debug-purpose code
+
 	obj_t result;
 	while (1) {
 		if (!yyparse(&result)) {
@@ -104,4 +109,15 @@ int main() {
 			printf("\n");
 		}
 	}
+#else
+	obj_t result;
+	while (1) {
+		if (!yyparse(&result)) {
+			result = evaluateObject(&result);
+			lisp_debug(&result, 0);
+			printf("\n");
+		}
+	}
+	return 0;
+#endif
 }

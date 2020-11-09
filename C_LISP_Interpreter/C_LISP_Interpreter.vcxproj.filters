@@ -13,12 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\lisp_processor_functions">
+      <UniqueIdentifier>{287fde82-9bf8-4c91-ac8c-6739f2579a09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C_LISP_Interpreter.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="lisp.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="lisp.tab.c">
@@ -26,6 +26,12 @@
     </ClCompile>
     <ClCompile Include="lisp.yy.c">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="lisp_processor.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="arithmetic.cpp">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +42,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="lisp.yy.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
