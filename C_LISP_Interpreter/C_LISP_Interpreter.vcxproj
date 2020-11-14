@@ -151,7 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="arithmetic.cpp" />
+    <ClCompile Include="arithmetic.c" />
     <ClCompile Include="C_LISP_Interpreter.c" />
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />

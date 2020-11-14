@@ -30,7 +30,7 @@
     <ClCompile Include="lisp_processor.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="arithmetic.cpp">
+    <ClCompile Include="arithmetic.c">
       <Filter>소스 파일\lisp_processor_functions</Filter>
     </ClCompile>
   </ItemGroup>

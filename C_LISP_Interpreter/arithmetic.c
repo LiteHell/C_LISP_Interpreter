@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "lisp_processor.h"
 #include <string.h>
 #include <stdbool.h>
