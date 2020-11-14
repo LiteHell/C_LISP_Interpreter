@@ -4,6 +4,7 @@
 typedef enum {
 	NUMBER,
 	SYMBOL,
+	LITSYMBOL,
 	CODE,
 	LIST,
 	NIL

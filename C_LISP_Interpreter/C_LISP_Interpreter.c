@@ -6,9 +6,9 @@ obj_t: 단일 lisp 객체를 나타냅니다. 타입 정의는 parsedef.h에 있
 아래의 값 중 포인터인 것은 전부 동적할당이고 아직 free 로직을 구현하지 않았기
 때문에 메모리 누수가 납니다. 나중에 프로젝트가 좀 진전되면 추가할 예정입니다.
 
-- type_t .type: 객체의 타입을 나타냅니다. NUMBER, SYMBOL, CODE, LIST, NIL 중
-  하나입니다. obj_t가 union이기 때문에 이 값을 변경하면 같은 객체의 다른 .type도
-  전부 변경됩니다.
+- type_t .type: 객체의 타입을 나타냅니다. NUMBER, SYMBOL, LITSYMBOL, CODE, LIST,
+  NIL 중 하나입니다. obj_t가 union이기 때문에 이 값을 변경하면 같은 객체의 다른
+  .type도 전부 변경됩니다.
   .type의 값에 따라 아래 3종류의 union 타입 중 하나만 접근해야 합니다. 단, NIL일
   경우 모든 타입이 쓰레기 값을 가지며 사용해서는 안 됩니다. NIL은 빈 리스트와
   문법적으로 같은 의미를 가집니다.
@@ -16,19 +16,23 @@ obj_t: 단일 lisp 객체를 나타냅니다. 타입 정의는 parsedef.h에 있
 - .number (.type = NUMBER)
   - .type
   - char * .literal: 입력한 원본 문자열을 나타냅니다. 혹시 몰라서 넣었고 이 값을
-	쓸 일이 없다고 확신할 수 있을 때 지울 예정입니다.
+    쓸 일이 없다고 확신할 수 있을 때 지울 예정입니다.
   - double .value: 입력한 수의 실제 값을 나타냅니다.
 
-- .symbol (.type = SYMBOL)
+- .symbol (.type = SYMBOL or LITSYMBOL)
   - .type
   - char * .symbol: 입력한 심볼 이름을 나타냅니다.
 
 - .list (.type = CODE or LIST)
   - .type
   - obj_t * .value: (CAR this)의 값입니다. NIL일 경우에도 non-null 포인터를
-	값으로 가집니다.
+    값으로 가집니다.
   - obj_t * .next: (CDR this)의 값입니다. NIL일 경우에는 null 포인터를 값으로
-	가집니다.
+    가집니다.
+  - 리스트를 반환하기 전에 전처리를 하기 때문에 '(...) 리스트의 모든 원소(원소의
+    원소를 포함해서)는 LIST 혹은 LITSYMBOL 타입을 가집니다.
+  - '(...)이 아닌 리스트는 첫 원소만 CODE 타입을, 나머지 원소는 LIST 타입을
+    가집니다.
 
 - .any도 있긴 한데 쓰지 말아주세요
 
@@ -62,6 +66,9 @@ void lisp_debug(obj_t const* const result, int indent) {
 		break;
 	case SYMBOL:
 		printf("\"%s\"", result->symbol.symbol);
+		break;
+	case LITSYMBOL:
+		printf("'\"%s\"", result->symbol.symbol);
 		break;
 	case CODE:
 		printf("(\n");

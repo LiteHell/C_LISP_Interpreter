@@ -77,7 +77,25 @@ void yyerror(obj_t *const r, char const *s) {
 	fprintf(stderr, "Syntax error!\n");
 }
 
-#line 81 "lisp.tab.c"
+void listify(obj_t *const o, int force) {
+	if(!o)
+		return;
+
+	switch(o->type) {
+		case SYMBOL:
+			if(force)
+				o->type = LITSYMBOL;
+		break;
+		case CODE: case LIST:
+			if(force)
+				o->type = LIST;
+			listify(o->list.next, force);
+			listify(o->list.value, force || o->list.value->type == LIST);
+		break;
+	}
+}
+
+#line 99 "C_LISP_Interpreter/lisp.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -110,8 +128,8 @@ void yyerror(obj_t *const r, char const *s) {
 
 /* Use api.header.include to #include this header
    instead of duplicating it here.  */
-#ifndef YY_YY_LISP_TAB_H_INCLUDED
-# define YY_YY_LISP_TAB_H_INCLUDED
+#ifndef YY_YY_C_LISP_INTERPRETER_LISP_TAB_H_INCLUDED
+# define YY_YY_C_LISP_INTERPRETER_LISP_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -147,7 +165,7 @@ extern YYSTYPE yylval;
 
 int yyparse (obj_t *const result);
 
-#endif /* !YY_YY_LISP_TAB_H_INCLUDED  */
+#endif /* !YY_YY_C_LISP_INTERPRETER_LISP_TAB_H_INCLUDED  */
 
 
 
@@ -510,8 +528,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    39,    40,    41,    42,    43,    46,    51,
-      59,    62
+       0,    50,    50,    58,    59,    60,    64,    68,    71,    76,
+      84,    87
 };
 #endif
 
@@ -1306,76 +1324,83 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 32 "lisp.y"
+#line 50 "lisp.y"
              {
 			*result = *(obj_t *)&(yyvsp[0].any);
+			listify(result, result->type == LIST);
 			YYACCEPT;
 		}
-#line 1315 "lisp.tab.c"
+#line 1334 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 3:
-#line 39 "lisp.y"
+#line 58 "lisp.y"
                    { (yyval.any).number = (yyvsp[0].number); }
-#line 1321 "lisp.tab.c"
+#line 1340 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 4:
-#line 40 "lisp.y"
+#line 59 "lisp.y"
                                 { (yyval.any).number = (yyvsp[0].number); }
-#line 1327 "lisp.tab.c"
+#line 1346 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 5:
-#line 41 "lisp.y"
-                     { (yyval.any).symbol = (yyvsp[0].symbol); }
-#line 1333 "lisp.tab.c"
+#line 60 "lisp.y"
+                     {
+			(yyval.any).symbol = (yyvsp[0].symbol);
+			(yyval.any).type = SYMBOL;
+		}
+#line 1355 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 6:
-#line 42 "lisp.y"
-                                { (yyval.any).symbol = (yyvsp[0].symbol); }
-#line 1339 "lisp.tab.c"
+#line 64 "lisp.y"
+                                {
+			(yyval.any).symbol = (yyvsp[0].symbol);
+			(yyval.any).type = LITSYMBOL;
+		}
+#line 1364 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 7:
-#line 43 "lisp.y"
+#line 68 "lisp.y"
                   {
 			(yyval.any).type = NIL;
 		}
-#line 1347 "lisp.tab.c"
+#line 1372 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 8:
-#line 46 "lisp.y"
+#line 71 "lisp.y"
                                      {
 			(yyval.any).list = (yyvsp[-1].list);
 			if((yyvsp[-1].list).type != NIL)
 				(yyval.any).type = CODE;
 		}
-#line 1357 "lisp.tab.c"
+#line 1382 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 9:
-#line 51 "lisp.y"
+#line 76 "lisp.y"
                                                 {
 			(yyval.any).list = (yyvsp[-1].list);
 			if((yyvsp[-1].list).type != NIL)
 				(yyval.any).type = LIST;
 		}
-#line 1367 "lisp.tab.c"
+#line 1392 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 10:
-#line 59 "lisp.y"
+#line 84 "lisp.y"
                {
 			(yyval.list).type = NIL;
 		}
-#line 1375 "lisp.tab.c"
+#line 1400 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 11:
-#line 62 "lisp.y"
+#line 87 "lisp.y"
                     {
 			(yyval.list).type = LIST;
 			(yyval.list).value = malloc(sizeof(obj_t));
@@ -1386,11 +1411,11 @@ yyreduce:
 			} else
 				(yyval.list).next = NULL;
 		}
-#line 1390 "lisp.tab.c"
+#line 1415 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
 
-#line 1394 "lisp.tab.c"
+#line 1419 "C_LISP_Interpreter/lisp.tab.c"
 
       default: break;
     }
@@ -1622,4 +1647,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 74 "lisp.y"
+#line 99 "lisp.y"
