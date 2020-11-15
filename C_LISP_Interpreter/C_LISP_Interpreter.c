@@ -105,7 +105,6 @@ void lisp_debug(obj_t const* const result, int indent) {
 }
 
 int main() {
-#define PARSER_DEBUG
 #ifdef PARSER_DEBUG
 	// Debug-purpose code
 
