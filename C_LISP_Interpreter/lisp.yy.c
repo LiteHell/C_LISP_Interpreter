@@ -1,6 +1,6 @@
-#line 2 "lisp.yy.c"
+#line 2 "C_LISP_Interpreter/lisp.yy.c"
 
-#line 4 "lisp.yy.c"
+#line 4 "C_LISP_Interpreter/lisp.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -450,8 +450,8 @@ char *yytext;
 #include "parsedef.h"
 #include "lisp.tab.h"
 int yywrap(void) { return 1; }
-#line 454 "lisp.yy.c"
-#line 455 "lisp.yy.c"
+#line 454 "C_LISP_Interpreter/lisp.yy.c"
+#line 455 "C_LISP_Interpreter/lisp.yy.c"
 
 #define INITIAL 0
 
@@ -670,7 +670,7 @@ YY_DECL
 	{
 #line 13 "lisp.l"
 
-#line 674 "lisp.yy.c"
+#line 674 "C_LISP_Interpreter/lisp.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -810,7 +810,7 @@ YY_RULE_SETUP
 #line 67 "lisp.l"
 ECHO;
 	YY_BREAK
-#line 814 "lisp.yy.c"
+#line 814 "C_LISP_Interpreter/lisp.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

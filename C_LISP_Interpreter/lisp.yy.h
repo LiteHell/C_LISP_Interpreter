@@ -2,9 +2,9 @@
 #define yyHEADER_H 1
 #define yyIN_HEADER 1
 
-#line 6 "lisp.yy.h"
+#line 6 "C_LISP_Interpreter/lisp.yy.h"
 
-#line 8 "lisp.yy.h"
+#line 8 "C_LISP_Interpreter/lisp.yy.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -469,6 +469,6 @@ extern int yylex (void);
 #line 67 "lisp.l"
 
 
-#line 473 "lisp.yy.h"
+#line 473 "C_LISP_Interpreter/lisp.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

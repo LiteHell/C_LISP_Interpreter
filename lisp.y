@@ -7,6 +7,24 @@
 void yyerror(obj_t *const r, char const *s) {
 	fprintf(stderr, "Syntax error!\n");
 }
+
+void listify(obj_t *const o, int force) {
+	if(!o)
+		return;
+
+	switch(o->type) {
+		case SYMBOL:
+			if(force)
+				o->type = LITSYMBOL;
+		break;
+		case CODE: case LIST:
+			if(force)
+				o->type = LIST;
+			listify(o->list.next, force);
+			listify(o->list.value, force || o->list.value->type == LIST);
+		break;
+	}
+}
 %}
 
 %start root
@@ -31,6 +49,7 @@ void yyerror(obj_t *const r, char const *s) {
 root:
 	expr {
 			*result = *(obj_t *)&$1;
+			listify(result, result->type == LIST);
 			YYACCEPT;
 		}
 	;
@@ -38,8 +57,14 @@ root:
 expr:
 	LEX_NUMBER { $$.number = $1; }
 	| LEX_SQUOTE LEX_NUMBER { $$.number = $2; }
-	| LEX_SYMBOL { $$.symbol = $1; }
-	| LEX_SQUOTE LEX_SYMBOL { $$.symbol = $2; }
+	| LEX_SYMBOL {
+			$$.symbol = $1;
+			$$.type = SYMBOL;
+		}
+	| LEX_SQUOTE LEX_SYMBOL {
+			$$.symbol = $2;
+			$$.type = LITSYMBOL;
+		}
 	| LEX_NIL {
 			$$.type = NIL;
 		}
