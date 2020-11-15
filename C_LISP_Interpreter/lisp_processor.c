@@ -1,12 +1,8 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "lisp_processor.h"
+#include "lisp_processor_functions.h"
 #include <string.h>
 
 typedef obj_t (*processorFunction)(obj_t* pObj);
-obj_t fn_add(obj_t* pObj);
-obj_t fn_multiply(obj_t* pObj);
-obj_t fn_subtract(obj_t* pObj);
-obj_t fn_divide(obj_t* pObj);
 
 #define FUNC_COUNT 4
 const char* funcNames[FUNC_COUNT] = { "+", "-", "/", "*" };

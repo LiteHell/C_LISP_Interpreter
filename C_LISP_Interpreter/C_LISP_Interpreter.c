@@ -98,10 +98,11 @@ void lisp_debug(obj_t const* const result, int indent) {
 }
 
 int main() {
-//#define PARSER_DEBUG
+#define PARSER_DEBUG
 #ifdef PARSER_DEBUG
 	// Debug-purpose code
 
+	printf("PARSER_DEBUG preprocessor constant is set, meaning no processer is running and only parser output is printed\n");
 	obj_t result;
 	while (1) {
 		if (!yyparse(&result)) {
