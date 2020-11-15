@@ -28,7 +28,7 @@ obj_t fn_add(obj_t* pObj) {
 		list = list->list.next;
 	}
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	_itoa(result.number.value, result.number.literal, 10);
+	sprintf(result.number.literal, "%d", result.number.value);
 	return result;
 }
 
@@ -55,7 +55,7 @@ obj_t fn_multiply(obj_t* pObj)
 		list = list->list.next;
 	}
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	_itoa(result.number.value, result.number.literal, 10);
+	sprintf(result.number.literal, "%d", result.number.value);
 	return result;
 }
 
@@ -82,7 +82,7 @@ obj_t fn_subtract(obj_t* pObj)
 		list = list->list.next;
 	}
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	_itoa(result.number.value, result.number.literal, 10);
+	sprintf(result.number.literal, "%d", result.number.value);
 	return result;
 }
 
@@ -109,6 +109,6 @@ obj_t fn_divide(obj_t* pObj)
 		list = list->list.next;
 	}
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	_itoa(result.number.value, result.number.literal, 10);
+	sprintf(result.number.literal, "%d", result.number.value);
 	return result;
 }
