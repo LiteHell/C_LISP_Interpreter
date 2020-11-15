@@ -27,8 +27,8 @@ obj_t fn_add(obj_t* pObj) {
 		result.number.value += evaluated.number.value;
 		list = list->list.next;
 	}
-	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	sprintf(result.number.literal, "%d", result.number.value);
+	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	sprintf(result.number.literal, "%lf", result.number.value);
 	return result;
 }
 
@@ -54,8 +54,8 @@ obj_t fn_multiply(obj_t* pObj)
 			result.number.value *= evaluated.number.value;
 		list = list->list.next;
 	}
-	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	sprintf(result.number.literal, "%d", result.number.value);
+	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	sprintf(result.number.literal, "%lf", result.number.value);
 	return result;
 }
 
@@ -81,8 +81,8 @@ obj_t fn_subtract(obj_t* pObj)
 			result.number.value -= evaluated.number.value;
 		list = list->list.next;
 	}
-	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	sprintf(result.number.literal, "%d", result.number.value);
+	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	sprintf(result.number.literal, "%lf", result.number.value);
 	return result;
 }
 
@@ -108,7 +108,7 @@ obj_t fn_divide(obj_t* pObj)
 			result.number.value /= evaluated.number.value;
 		list = list->list.next;
 	}
-	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 1));
-	sprintf(result.number.literal, "%d", result.number.value);
+	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	sprintf(result.number.literal, "%lf", result.number.value);
 	return result;
 }
