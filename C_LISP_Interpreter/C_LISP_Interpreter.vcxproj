@@ -214,12 +214,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="arithmetic.c" />
+    <ClCompile Include="c_dictionary.c" />
     <ClCompile Include="C_LISP_Interpreter.c" />
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="c_dictionary.h" />
     <ClInclude Include="lisp.tab.h" />
     <ClInclude Include="lisp.yy.h" />
     <ClInclude Include="lisp_processor.h" />
