@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\lisp_processor_functions">
       <UniqueIdentifier>{287fde82-9bf8-4c91-ac8c-6739f2579a09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\lisp_processor_functions">
+      <UniqueIdentifier>{c9de7d42-4b39-44cf-919b-251d0aca197f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C_LISP_Interpreter.c">
@@ -36,6 +39,9 @@
     <ClCompile Include="c_dictionary.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="symbol.c">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parsedef.h">
@@ -50,11 +56,17 @@
     <ClInclude Include="lisp_processor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="lisp_processor_functions.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="c_dictionary.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_functions_arithmetic.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_functions.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_functions_symbol.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

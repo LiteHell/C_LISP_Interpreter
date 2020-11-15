@@ -118,6 +118,7 @@ int main() {
 	}
 #else
 	obj_t result;
+	initializeProcessor();
 	while (1) {
 		if (!yyparse(&result)) {
 			result = evaluateObject(&result);
@@ -125,6 +126,7 @@ int main() {
 			printf("\n");
 		}
 	}
+	freeProcessor();
 	return 0;
 #endif
 }

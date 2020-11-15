@@ -31,13 +31,21 @@ void dict_insert(C_DICTIONARY* dict, char* key, obj_t* obj)
 	curNode->nextNode = NULL;
 	curNode->key = (char*)malloc(sizeof(char) * (strlen(key) + 1));
 	strcpy(curNode->key, key);
+
 	if (dict->count == 0) {
 		dict->firstNode = curNode;
 	}
 	else {
 		C_DICTIONARY_NODE* node = dict->firstNode;
-		while (node->nextNode != NULL)
+		while (node->nextNode != NULL) {
+			if (strcmp(curNode->key, key) == 0) {
+				node->object = curNode->object;
+				free(curNode->key);
+				free(curNode);
+				return;
+			}
 			node = node->nextNode;
+		}
 		node->nextNode = curNode;
 	}
 	dict->count++;

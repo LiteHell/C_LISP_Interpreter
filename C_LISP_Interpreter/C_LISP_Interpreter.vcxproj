@@ -219,13 +219,16 @@
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
+    <ClCompile Include="symbol.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lisp_processor_functions.h" />
     <ClInclude Include="c_dictionary.h" />
     <ClInclude Include="lisp.tab.h" />
     <ClInclude Include="lisp.yy.h" />
     <ClInclude Include="lisp_processor.h" />
-    <ClInclude Include="lisp_processor_functions.h" />
+    <ClInclude Include="lisp_processor_functions_arithmetic.h" />
+    <ClInclude Include="lisp_processor_functions_symbol.h" />
     <ClInclude Include="parsedef.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <string.h>
 #include <stdbool.h>
-#include "lisp_processor_functions.h"
+#include "lisp_processor_functions_arithmetic.h"
 
 int getDigitCount(int n) {
 	int digits = 1;
