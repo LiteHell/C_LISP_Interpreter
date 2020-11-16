@@ -219,6 +219,7 @@
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
+    <ClCompile Include="list.c" />
     <ClCompile Include="symbol.c" />
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +229,7 @@
     <ClInclude Include="lisp.yy.h" />
     <ClInclude Include="lisp_processor.h" />
     <ClInclude Include="lisp_processor_functions_arithmetic.h" />
+    <ClInclude Include="lisp_processor_functions_list.h" />
     <ClInclude Include="lisp_processor_functions_symbol.h" />
     <ClInclude Include="parsedef.h" />
   </ItemGroup>

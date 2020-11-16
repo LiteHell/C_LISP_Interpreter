@@ -34,12 +34,41 @@ bool lowercased_strcmp(char* a, char* b) {
 	return true;
 }
 
+bool is_cadr_string(char* str) {
+	if (strlen(str) < 3)
+		return false;
+	if (str[0] != 'c' && str[0] != 'C')
+		return false;
+
+	char c;
+	while (c = tolower(*(++str))) {
+		if (c == 'r')
+			return *(++str) == '\0';
+		else if (c != 'a' && c != 'd')
+			return false;
+	}
+	return false;
+}
+
 obj_t evaluateObject(const obj_t* pObj) {
 	obj_t result = *pObj;
 	switch (pObj->type) {
 	case CODE: {
 		string_t funcName = pObj->list.value->symbol.symbol;
 		for (int i = 0; i < FUNC_COUNT; i++) {
+			// Handle car and cdr separately
+			if (is_cadr_string(funcName)) {
+				char* c = funcName + strlen(funcName) - 1;
+				result = *result.list.next->list.value;
+				while (tolower(*(--c)) != 'c') {
+					if (tolower(*c) == 'a')
+						result = fn_car(&result);
+					else if (tolower(*c) == 'd')
+						result = fn_cdr(&result);
+				}
+				return result;
+			}
+
 			if (lowercased_strcmp(funcName, funcNames[i])) {
 				return (funcs[i](pObj->list.next));
 			}
