@@ -20,19 +20,6 @@ void freeProcessor()
 	dict_free(symbolsDict);
 }
 
-bool lowercased_strcmp(char* a, char* b) {
-	char ca = 'a', cb = 'a';
-	if (strlen(a) != strlen(b))
-		return false;
-	for (; ca != NULL; a++, b++) {
-		ca = *a;
-		cb = *b;
-		if (tolower(ca) != tolower(cb))
-			return false;
-	}
-	return true;
-}
-
 bool is_cadr_string(char* str) {
 	if (strlen(str) < 3)
 		return false;
@@ -68,7 +55,8 @@ obj_t evaluateObject(const obj_t* pObj) {
 				return result;
 			}
 
-			if (lowercased_strcmp(funcName, funcNames[i])) {
+			// All symbols are uppercased, so no need of case insensitive strcmp
+			if (strcmp(funcName, funcNames[i]) == 0) {
 				return (funcs[i](pObj->list.next));
 			}
 		}
