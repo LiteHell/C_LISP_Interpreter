@@ -17,3 +17,11 @@ obj_t fn_setq(obj_t* pObj)
 	dict_insert(symbolsDict, symbol->symbol.symbol, &evaluated);
 	return evaluated;
 }
+
+obj_t fn_list(obj_t* pObj)
+{
+	obj_t result = *pObj;
+	result.type = LIST;
+	result = evaluateObject(&result);
+	return result;
+}
