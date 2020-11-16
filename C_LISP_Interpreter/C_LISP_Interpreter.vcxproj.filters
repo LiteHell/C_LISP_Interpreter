@@ -45,6 +45,9 @@
     <ClCompile Include="list.c">
       <Filter>소스 파일\lisp_processor_functions</Filter>
     </ClCompile>
+    <ClCompile Include="func_util.c">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parsedef.h">
@@ -72,6 +75,9 @@
       <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
     <ClInclude Include="lisp_processor_functions_list.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_utils.h">
       <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
   </ItemGroup>

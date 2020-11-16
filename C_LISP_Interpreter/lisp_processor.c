@@ -6,9 +6,9 @@
 
 typedef obj_t (*processorFunction)(obj_t* pObj);
 
-#define FUNC_COUNT 5
-const char* funcNames[FUNC_COUNT] = { "+", "-", "/", "*", "setq" };
-processorFunction funcs[FUNC_COUNT] = { fn_add, fn_subtract, fn_divide, fn_multiply, fn_setq };
+#define FUNC_COUNT 14
+const char* funcNames[FUNC_COUNT] = { "+", "-", "/", "*", "setq", LIST_FUNC_NAMES };
+processorFunction funcs[FUNC_COUNT] = { fn_add, fn_subtract, fn_divide, fn_multiply, fn_setq, LIST_FUNCS };
 C_DICTIONARY* symbolsDict;
 
 void initializeProcessor()
