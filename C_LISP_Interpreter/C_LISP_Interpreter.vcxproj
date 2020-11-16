@@ -220,10 +220,12 @@
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
+    <ClCompile Include="lisp_processor_function_conditional.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="symbol.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lisp_processor_functions_conditional.h" />
     <ClInclude Include="lisp_processor_utils.h" />
     <ClInclude Include="lisp_processor_functions.h" />
     <ClInclude Include="c_dictionary.h" />
