@@ -12,6 +12,7 @@ obj_t fn_member(obj_t* pObj);
 obj_t fn_assoc(obj_t* pObj);
 obj_t fn_remove(obj_t* pObj);
 obj_t fn_subst(obj_t* pObj);
-#define LIST_FUNC_NAMES "nth", "cons", "reverse", "append", "length", "member", "assoc", "remove", "subst"
-#define LIST_FUNCS fn_nth, fn_cons, fn_reverse, fn_append, fn_length, fn_member, fn_assoc, fn_remove, fn_subst
+#define LISP_LIST_FUNC_COUNT 9
+#define LISP_LIST_FUNC_NAMES "nth", "cons", "reverse", "append", "length", "member", "assoc", "remove", "subst"
+#define LISP_LIST_FUNCS fn_nth, fn_cons, fn_reverse, fn_append, fn_length, fn_member, fn_assoc, fn_remove, fn_subst
 #endif

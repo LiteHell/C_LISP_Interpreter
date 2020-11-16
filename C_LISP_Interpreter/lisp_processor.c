@@ -6,9 +6,8 @@
 
 typedef obj_t (*processorFunction)(obj_t* pObj);
 
-#define FUNC_COUNT 14
-const char* funcNames[FUNC_COUNT] = { "+", "-", "/", "*", "setq", LIST_FUNC_NAMES };
-processorFunction funcs[FUNC_COUNT] = { fn_add, fn_subtract, fn_divide, fn_multiply, fn_setq, LIST_FUNCS };
+const char* funcNames[LISP_FUNC_COUNT] = { LISP_FUNC_NAMES };
+processorFunction funcs[LISP_FUNC_COUNT] = { LISP_FUNCS };
 C_DICTIONARY* symbolsDict;
 
 void initializeProcessor()
@@ -55,7 +54,7 @@ obj_t evaluateObject(const obj_t* pObj) {
 	switch (pObj->type) {
 	case CODE: {
 		string_t funcName = pObj->list.value->symbol.symbol;
-		for (int i = 0; i < FUNC_COUNT; i++) {
+		for (int i = 0; i < LISP_FUNC_COUNT; i++) {
 			// Handle car and cdr separately
 			if (is_cadr_string(funcName)) {
 				char* c = funcName + strlen(funcName) - 1;
@@ -73,6 +72,9 @@ obj_t evaluateObject(const obj_t* pObj) {
 				return (funcs[i](pObj->list.next));
 			}
 		}
+		obj_t newVal = *pObj;
+		newVal.type = LIST;
+		return evaluateObject(&newVal);
 		break;
 	}
 	case LIST: {
