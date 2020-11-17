@@ -24,7 +24,7 @@ obj_t makeNumber(double number) {
 	obj_t result;
 	result.type = NUMBER;
 	result.number.type = NUMBER;
-	result.number.value = 0;
+	result.number.value = number;
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
 	sprintf(result.number.literal, "%lf", result.number.value);
 	result.number.literal = (string_t)realloc(result.number.literal, sizeof(char) * (strlen(result.number.literal) + 1));
