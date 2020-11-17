@@ -12,6 +12,9 @@ obj_t fn_if(obj_t* pObj) {
 	else if (pObj->list.next->list.next != NULL) {
 		return evaluateObject(pObj->list.next->list.next->list.value);
 	}
+	else {
+		return create_nil();
+	}
 }
 obj_t fn_cond(obj_t* pObj) {
 	obj_t* list = pObj;
