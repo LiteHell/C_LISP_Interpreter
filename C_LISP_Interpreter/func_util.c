@@ -57,7 +57,16 @@ obj_t* prependList(obj_t* list, obj_t* value) {
 
 
 obj_t* appendList(obj_t* list, obj_t* value) {
-
+	obj_t* nextList = (obj_t*)malloc(sizeof(obj_t));
+	if (nextList == NULL) { return NULL; }
+	while (list->list.next != NULL)
+		list = list->list.next;
+	nextList->type = LIST;
+	nextList->list.type = LIST;
+	nextList->list.value = value;
+	nextList->list.next = NULL;
+	list->list.next = nextList;
+	return nextList;
 }
 
 obj_t create_nil()
