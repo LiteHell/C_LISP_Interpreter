@@ -128,111 +128,138 @@ obj_t fn_reverse(obj_t* pObj)
 // APPEND : 매개변수들의 전달받은 리스트들을 서로 연결하여 만든 새로운 리스트를 반환한다.
 obj_t fn_append(obj_t* pObj)
 {
-	bool firstElement = true;
 	obj_t* listNow = pObj;
-	obj_t* newList = (obj_t*)malloc(sizeof(obj_t));
-	obj_t* newListTail = newList;
+	obj_t* newList = NULL;
+	// 매개변수로 전달받은 리스트들을 반복
 	while (listNow != NULL) {
-		obj_t list = evaluateObject(listNow->list.value);
-		if (list.type != LIST)
+		// 매개변수 평가
+		obj_t innerList = evaluateObject(listNow->list.value);
+		// 만약 평가값이 리스트가 아니라면 오류 반환
+		if (innerList.type != LIST)
 		{
 			return create_error();
 		}
-		obj_t* innerListNow = &list;
+		// 리스트 내부를 반복
+		obj_t* innerListNow = &innerList;
 		while (innerListNow != NULL) {
-			if (firstElement) {
-				firstElement = false;
+			if (newList == NULL) {
+				// 첫 루프라면 리스트 생성
+				newList = makeListWithValue(innerListNow->list.value);
+				// 메모리 할당실패시 오류 반환
+				if (newList == NULL)
+					return create_error();
 			}
 			else {
-				obj_t* newListNode = (obj_t*)malloc(sizeof(obj_t));
-				newListTail->list.next = newListNode;
-				newListTail = newListNode;
+				// 첫 루프가 아니라면 리스트의 뒤에 추가
+				appendList(newList, innerListNow->list.value);
 			}
-			newListTail->type = LIST;
-			newListTail->list.value = innerListNow->list.value;
-			newListTail->list.next = NULL;
-
-
 			innerListNow = innerListNow->list.next;
 		}
 
 		listNow = listNow->list.next;
 	}
-	return *newList;
+	if (newList == NULL)
+		return create_error();
+	else
+		return *newList;
 }
 
 obj_t fn_length(obj_t* pObj)
 {
+	// 매개변수 평가
 	obj_t evaluatedList = evaluateObject(pObj->list.value);
+	// 매개변수가 리스트 형식이 아니라면 오류 반환
 	if (evaluatedList.type != LIST)
 	{
 		return create_error();
 	}
+	// 갯수를 저장할 변수
 	int count = 0;
 	obj_t* now = &evaluatedList;
+	// 갯수를 센다
 	while (now != NULL) {
 		count++;
 		now = now->list.next;
 	}
+	// 결과 반환
 	return makeNumber(count);
 }
 
 obj_t fn_member(obj_t* pObj)
 {
+	// 첫번째 매개변수 평가, 리스트 내에서 찾아야할 값이다.
 	obj_t target = evaluateObject(pObj->list.value);
+	// 두번째 매개변수 평가, 특정 값을 찾을 리스트이다.
 	obj_t evaluatedList = evaluateObject(pObj->list.next->list.value);
+	// 두번째 매개변수가 리스트가 아니라면 오류 반환
 	if (evaluatedList.type != LIST)
 	{
 		return create_error();
 	}
+	
+	// 루프용 변수
 	obj_t* now = &evaluatedList;
 	while (now != NULL) {
+		// 찾았다면 현재 리스트를 반환
 		if (obj_equals(now->list.value, &target)) {
 			return *now;
 		}
 		now = now->list.next;
 	}
+	// 못 찾았다면 nil 반환
 	return makeNIL();
 
 }
 
 obj_t fn_assoc(obj_t* pObj)
 {
+	// 키로 사용할 첫번째 매개변수 평가
 	obj_t key = evaluateObject(pObj->list.value);
+	// DB로 사용할 두번째 매개변수 평가, 리스트가 아니라면 오류를 반환한다.
 	obj_t evaluatedList = evaluateObject(pObj->list.next->list.value);
 	if (evaluatedList.type != LIST)
 	{
 		return create_error();
 	}
+
 	obj_t* now = &evaluatedList;
 	while (now != NULL) {
+		// DB 요소
 		obj_t* entry = now->list.value;
+		// DB 요소의 키
 		obj_t* entryKey = entry->list.value;
+		// DB 요소의 값
 		obj_t* entryValue = entry->list.next->list.value;
+		
+		// DB 요소의 키와 전달받은 키가 일치한다면 해당 요소를 반환한다.
 		if (obj_equals(entryKey, &key)) {
 			return *entry;
 		}
 		now = now->list.next;
 	}
+
+	// 찾지 못했다면 NIL을 반환한다.
 	return makeNIL();
 }
 
 obj_t fn_remove(obj_t* pObj)
 {
+	// 매개변수 평가 및 유형 검증
 	obj_t target = evaluateObject(pObj->list.value);
 	obj_t evaluatedList = evaluateObject(pObj->list.next->list.value);
 	if (evaluatedList.type != LIST)
 	{
 		return create_error();
 	}
+
 	obj_t* head = &evaluatedList, * now = head, * prev = NULL;
 	while (now != NULL && head != NULL) {
 		if (obj_equals(now->list.value, &target)) {
-			// Remove it
-			if (prev == NULL) {
+			// 일치한다면 제거한다.
+			if (prev == NULL) { // 첫 요소를 삭제하는 경우라면, head를 cdr로 대입하는 것만으로 삭제의 효과가 나타난다.
 				head = now->list.next;
 			}
-			else {
+			else { // 첫 요소가 아니라면, 링크드리스트에서 삭제하는 방식과 같이 접근한다.
 				prev->list.next = now->list.next;
 				now = prev;
 			}
@@ -240,6 +267,7 @@ obj_t fn_remove(obj_t* pObj)
 		prev = now;
 		now = now->list.next;
 	}
+
 	if (head == NULL)
 		return makeNIL();
 	else
@@ -248,6 +276,7 @@ obj_t fn_remove(obj_t* pObj)
 
 obj_t fn_subst(obj_t* pObj)
 {
+	// 매개변수 평가 및 검증
 	obj_t newValue = evaluateObject(pObj->list.value);
 	obj_t oldValue = evaluateObject(pObj->list.next->list.value);
 	obj_t evaluatedList = evaluateObject(pObj->list.next->list.next->list.value);
@@ -255,9 +284,11 @@ obj_t fn_subst(obj_t* pObj)
 	{
 		return create_error();
 	}
+
 	obj_t *now = &evaluatedList;
 	while (now != NULL) {
 		if (obj_equals(now->list.value, &oldValue)) {
+			// 일치한다면 value를 바꾼다.
 			*now->list.value = newValue;
 		}
 		now = now->list.next;
