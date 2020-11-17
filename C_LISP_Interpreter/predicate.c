@@ -27,7 +27,9 @@ obj_t fn_numberp(obj_t* pObj)
 obj_t fn_zerop(obj_t* pObj)
 {
 	obj_t a = evaluateObject(pObj->list.value);
-	if (a.type == NUMBER && a.number.value == 0)
+	if (a.type != NUMBER)
+		return create_error();
+	else if (a.number.value == 0)
 		return create_t();
 	else
 		return create_nil();
@@ -36,7 +38,9 @@ obj_t fn_zerop(obj_t* pObj)
 obj_t fn_minusp(obj_t* pObj)
 {
 	obj_t a = evaluateObject(pObj->list.value);
-	if (a.type == NUMBER && a.number.value < 0)
+	if (a.type != NUMBER)
+		return create_error();
+	else if (a.number.value < 0)
 		return create_t();
 	else
 		return create_nil();
