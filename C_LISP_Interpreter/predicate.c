@@ -74,6 +74,20 @@ obj_t fn_lessthan(obj_t* pObj)
 
 }
 
+obj_t fn_greaterthan(obj_t* pObj)
+{
+	obj_t a = evaluateObject(pObj->list.value);
+	if (pObj->list.next == NULL)
+		return create_error();
+
+	obj_t b = evaluateObject(pObj->list.next->list.value);
+	if (a.type == NUMBER && b.type == NUMBER && a.number.value > b.number.value)
+		return create_t();
+	else
+		return create_nil();
+
+}
+
 obj_t fn_greaterOrEqualThan(obj_t* pObj)
 {
 	obj_t a = evaluateObject(pObj->list.value);
@@ -82,6 +96,19 @@ obj_t fn_greaterOrEqualThan(obj_t* pObj)
 
 	obj_t b = evaluateObject(pObj->list.next->list.value);
 	if (a.type == NUMBER && b.type == NUMBER && a.number.value >= b.number.value)
+		return create_t();
+	else
+		return create_nil();
+}
+
+obj_t fn_lessOrEqualThan(obj_t* pObj)
+{
+	obj_t a = evaluateObject(pObj->list.value);
+	if (pObj->list.next == NULL)
+		return create_error();
+
+	obj_t b = evaluateObject(pObj->list.next->list.value);
+	if (a.type == NUMBER && b.type == NUMBER && a.number.value <= b.number.value)
 		return create_t();
 	else
 		return create_nil();
