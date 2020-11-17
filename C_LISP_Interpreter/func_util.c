@@ -4,6 +4,61 @@
 #include "parsedef.h"
 #include "lisp_processor_utils.h"
 
+int getDigitCount(int n) {
+	int digits = 1;
+	while (n > 10) {
+		n /= 10;
+		digits++;
+	}
+	return digits;
+}
+
+obj_t makeNIL() {
+	obj_t obj;
+	obj.type = NIL;
+	return obj;
+}
+
+obj_t makeNumber(double number) {
+	obj_t result;
+	result.type = NUMBER;
+	result.number.type = NUMBER;
+	result.number.value = 0;
+	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	sprintf(result.number.literal, "%lf", result.number.value);
+	result.number.literal = (string_t)realloc(result.number.literal, sizeof(char) * (strlen(result.number.literal) + 1));
+
+	return result;
+}
+
+obj_t* makeListWithValue(obj_t* value) {
+	obj_t* newList = malloc(sizeof(obj_t));
+	if (newList == NULL)
+		return NULL;
+	newList->type = LIST;
+	newList->list.type = LIST;
+	newList->list.next = NULL;
+	newList->list.value = value;
+	return newList;
+}
+
+
+obj_t* prependList(obj_t* list, obj_t* value) {
+	obj_t* nextList = list;
+	obj_t* newList = (obj_t*)malloc(sizeof(obj_t));
+	if (newList == NULL) { return NULL; }
+	newList->type = LIST;
+	newList->list.type = LIST;
+	newList->list.next = nextList;
+	newList->list.value = value;
+	return newList;
+}
+
+
+obj_t* appendList(obj_t* list, obj_t* value) {
+
+}
+
 bool obj_equals(obj_t* a, obj_t* b) {
 	if (a->type != b->type)
 		return false;

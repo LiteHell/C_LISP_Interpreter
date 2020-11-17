@@ -57,7 +57,9 @@ obj_t evaluateObject(const obj_t* pObj) {
 
 			// All symbols are uppercased, so no need of case insensitive strcmp
 			if (strcmp(funcName, funcNames[i]) == 0) {
-				return (funcs[i](pObj->list.next));
+				obj_t parameters = *pObj->list.next;
+				parameters.type = LIST;
+				return (funcs[i](&parameters));
 			}
 		}
 		obj_t newVal = *pObj;

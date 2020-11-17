@@ -48,6 +48,12 @@
     <ClCompile Include="func_util.c">
       <Filter>소스 파일\lisp_processor_functions</Filter>
     </ClCompile>
+    <ClCompile Include="predicate.c">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
+    </ClCompile>
+    <ClCompile Include="control.c">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parsedef.h">
@@ -78,6 +84,12 @@
       <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
     <ClInclude Include="lisp_processor_utils.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_functions_predicate.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
+    <ClInclude Include="lisp_processor_functions_control.h">
       <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
   </ItemGroup>
