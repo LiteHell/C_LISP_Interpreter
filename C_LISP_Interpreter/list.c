@@ -102,12 +102,11 @@ obj_t fn_reverse(obj_t* pObj)
 	if (evaluatedList.type != LIST)
 		return create_error();
 
-	// 뒤집기 전의 리스트
-	obj_t* curList = &evaluatedList;
 	// 뒤집은 후의 리스트
 	obj_t* newList = NULL;
 
-	while (curList != NULL) {
+	// 뒤집기 전의 리스트(curList)내에서 반복한다.
+	for (obj_t* curList = &evaluatedList; curList != NULL; curList = curList->list.next) {
 		if (newList == NULL) {
 			// 첫 루프라면, curList의 car값을 가진 리스트를 생성해 newList에 넣는다.
 			newList = makeListWithValue(curList->list.value);
@@ -118,8 +117,6 @@ obj_t fn_reverse(obj_t* pObj)
 		}
 		if (newList == NULL)
 			return create_error();
-		// curList = (curList의 cdr)
-		curList = curList->list.next;
 	}
 
 	return *newList;
@@ -128,10 +125,9 @@ obj_t fn_reverse(obj_t* pObj)
 // APPEND : 매개변수들의 전달받은 리스트들을 서로 연결하여 만든 새로운 리스트를 반환한다.
 obj_t fn_append(obj_t* pObj)
 {
-	obj_t* listNow = pObj;
 	obj_t* newList = NULL;
 	// 매개변수로 전달받은 리스트들을 반복
-	while (listNow != NULL) {
+	for (obj_t* listNow = pObj; listNow != NULL; listNow = listNow->list.next) {
 		// 매개변수 평가
 		obj_t innerList = evaluateObject(listNow->list.value);
 		// 만약 평가값이 리스트가 아니라면 오류 반환
@@ -139,9 +135,9 @@ obj_t fn_append(obj_t* pObj)
 		{
 			return create_error();
 		}
+
 		// 리스트 내부를 반복
-		obj_t* innerListNow = &innerList;
-		while (innerListNow != NULL) {
+		for (obj_t* innerListNow = &innerList; innerListNow != NULL; innerListNow = innerListNow->list.next) {
 			if (newList == NULL) {
 				// 첫 루프라면 리스트 생성
 				newList = makeListWithValue(innerListNow->list.value);
@@ -153,10 +149,7 @@ obj_t fn_append(obj_t* pObj)
 				// 첫 루프가 아니라면 리스트의 뒤에 추가
 				appendList(newList, innerListNow->list.value);
 			}
-			innerListNow = innerListNow->list.next;
 		}
-
-		listNow = listNow->list.next;
 	}
 	if (newList == NULL)
 		return create_error();
@@ -175,11 +168,10 @@ obj_t fn_length(obj_t* pObj)
 	}
 	// 갯수를 저장할 변수
 	int count = 0;
-	obj_t* now = &evaluatedList;
+	
 	// 갯수를 센다
-	while (now != NULL) {
+	for (obj_t* now = &evaluatedList; now != NULL; now = now->list.next) {
 		count++;
-		now = now->list.next;
 	}
 	// 결과 반환
 	return makeNumber(count);
@@ -197,14 +189,11 @@ obj_t fn_member(obj_t* pObj)
 		return create_error();
 	}
 	
-	// 루프용 변수
-	obj_t* now = &evaluatedList;
-	while (now != NULL) {
+	for (obj_t* now = &evaluatedList; now != NULL; now = now->list.next) {
 		// 찾았다면 현재 리스트를 반환
 		if (obj_equals(now->list.value, &target)) {
 			return *now;
 		}
-		now = now->list.next;
 	}
 	// 못 찾았다면 nil 반환
 	return makeNIL();
@@ -222,8 +211,8 @@ obj_t fn_assoc(obj_t* pObj)
 		return create_error();
 	}
 
-	obj_t* now = &evaluatedList;
-	while (now != NULL) {
+	
+	for (obj_t* now = &evaluatedList; now != NULL; now = now->list.next) {
 		// DB 요소
 		obj_t* entry = now->list.value;
 		// DB 요소의 키
@@ -235,7 +224,6 @@ obj_t fn_assoc(obj_t* pObj)
 		if (obj_equals(entryKey, &key)) {
 			return *entry;
 		}
-		now = now->list.next;
 	}
 
 	// 찾지 못했다면 NIL을 반환한다.
@@ -285,13 +273,12 @@ obj_t fn_subst(obj_t* pObj)
 		return create_error();
 	}
 
-	obj_t *now = &evaluatedList;
-	while (now != NULL) {
+	
+	for (obj_t* now = &evaluatedList; now != NULL; now = now->list.next) {
 		if (obj_equals(now->list.value, &oldValue)) {
 			// 일치한다면 value를 바꾼다.
 			*now->list.value = newValue;
 		}
-		now = now->list.next;
 	}
 	return evaluatedList;
 
