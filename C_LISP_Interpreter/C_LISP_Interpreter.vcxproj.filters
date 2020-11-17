@@ -92,5 +92,8 @@
     <ClInclude Include="lisp_processor_functions_control.h">
       <Filter>헤더 파일\lisp_processor_functions</Filter>
     </ClInclude>
+    <ClInclude Include="lisp_processor_functions_conditional.h">
+      <Filter>헤더 파일\lisp_processor_functions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

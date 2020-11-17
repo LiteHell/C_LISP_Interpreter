@@ -226,6 +226,7 @@
     <ClCompile Include="symbol.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lisp_processor_functions_conditional.h" />
     <ClInclude Include="lisp_processor_functions_control.h" />
     <ClInclude Include="lisp_processor_functions_predicate.h" />
     <ClInclude Include="lisp_processor_utils.h" />
