@@ -26,8 +26,13 @@ obj_t makeNumber(double number) {
 	result.number.type = NUMBER;
 	result.number.value = number;
 	result.number.literal = (string_t)malloc(sizeof(char) * (getDigitCount(result.number.value) + 30));
+	if (result.number.literal == NULL)
+		return create_error();
 	sprintf(result.number.literal, "%lf", result.number.value);
-	result.number.literal = (string_t)realloc(result.number.literal, sizeof(char) * (strlen(result.number.literal) + 1));
+	string_t realloced = (string_t)realloc(result.number.literal, sizeof(char) * (strlen(result.number.literal) + 1));
+	if (realloced == NULL)
+		return create_error();
+	result.number.literal = realloced;
 
 	return result;
 }
