@@ -54,6 +54,9 @@
     <ClCompile Include="control.c">
       <Filter>소스 파일\lisp_processor_functions</Filter>
     </ClCompile>
+    <ClCompile Include="lisp_processor_function_conditional.c">
+      <Filter>소스 파일\lisp_processor_functions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parsedef.h">

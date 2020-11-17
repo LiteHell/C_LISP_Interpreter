@@ -6,7 +6,7 @@ obj_t fn_if(obj_t* pObj) {
 	if (pObj->list.next == NULL)
 		return create_error();
 
-	if (is_t(condition)) {
+	if (is_t(&condition)) {
 		return evaluateObject(pObj->list.next->list.value);
 	}
 	else if (pObj->list.next->list.next != NULL) {
@@ -20,7 +20,7 @@ obj_t fn_cond(obj_t* pObj) {
 		if (caseList.type != LIST)
 			return create_error();
 		obj_t condition = evaluateObject(caseList.list.value);
-		if (is_t(condition)) {
+		if (is_t(&condition)) {
 			if (caseList.list.next == NULL)
 				return create_error();
 			return evaluateObject(caseList.list.next->list.value);

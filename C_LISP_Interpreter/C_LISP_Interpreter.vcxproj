@@ -221,6 +221,7 @@
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
+    <ClCompile Include="lisp_processor_function_conditional.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="predicate.c" />
     <ClCompile Include="symbol.c" />

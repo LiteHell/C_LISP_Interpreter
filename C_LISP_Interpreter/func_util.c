@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -57,6 +58,13 @@ obj_t* prependList(obj_t* list, obj_t* value) {
 
 obj_t* appendList(obj_t* list, obj_t* value) {
 
+}
+
+obj_t create_nil()
+{
+	obj_t result;
+	result.type = NIL;
+	return result;
 }
 
 bool obj_equals(obj_t* a, obj_t* b) {
