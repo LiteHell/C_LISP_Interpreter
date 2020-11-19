@@ -86,16 +86,18 @@ void listify(obj_t *const o, int force) {
 			if(force)
 				o->type = LITSYMBOL;
 		break;
+		case _EXPLICIT_LITERAL_LIST:
+			force = 1;
 		case CODE: case LIST:
 			if(force)
 				o->type = LIST;
 			listify(o->list.next, force);
-			listify(o->list.value, force || o->list.value->type == LIST);
+			listify(o->list.value, force);
 		break;
 	}
 }
 
-#line 99 "C_LISP_Interpreter/lisp.tab.c"
+#line 101 "C_LISP_Interpreter/lisp.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -145,11 +147,12 @@ extern int yydebug;
   {
     LEX_NUMBER = 258,
     LEX_SYMBOL = 259,
-    LEX_NIL = 260,
-    LEX_SQUOTE = 261,
-    LEX_LPAREN = 262,
-    LEX_RPAREN = 263,
-    LEX_UNKNOWN = 264
+    LEX_STRING = 260,
+    LEX_NIL = 261,
+    LEX_SQUOTE = 262,
+    LEX_LPAREN = 263,
+    LEX_RPAREN = 264,
+    LEX_UNKNOWN = 265
   };
 #endif
 
@@ -471,19 +474,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  13
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   13
+#define YYLAST   11
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  10
+#define YYNTOKENS  11
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  18
+#define YYNSTATES  16
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   264
+#define YYMAXUTOK   265
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -521,15 +524,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9
+       5,     6,     7,     8,     9,    10
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    50,    50,    58,    59,    60,    64,    68,    71,    76,
-      84,    87
+       0,    54,    54,    62,    65,    79,    80,    84,    85,    90,
+      96,    99
 };
 #endif
 
@@ -538,9 +541,9 @@ static const yytype_int8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "LEX_NUMBER", "LEX_SYMBOL", "LEX_NIL",
-  "LEX_SQUOTE", "LEX_LPAREN", "LEX_RPAREN", "LEX_UNKNOWN", "$accept",
-  "root", "expr", "list", YY_NULLPTR
+  "$end", "error", "$undefined", "LEX_NUMBER", "LEX_SYMBOL", "LEX_STRING",
+  "LEX_NIL", "LEX_SQUOTE", "LEX_LPAREN", "LEX_RPAREN", "LEX_UNKNOWN",
+  "$accept", "root", "expr", "pure_expr", "list", YY_NULLPTR
 };
 #endif
 
@@ -549,7 +552,8 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_int16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,   263,   264
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265
 };
 # endif
 
@@ -567,8 +571,8 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -4,    -4,    -4,     2,    -3,     7,    -4,    -4,    -4,
-      -3,    -3,     4,    -4,     5,    -4,    -4,    -4
+      -3,    -4,    -4,    -4,    -4,    -3,    -3,     7,    -4,    -4,
+      -4,    -3,    -1,    -4,    -4,    -4
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -576,20 +580,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     3,     5,     7,     0,    10,     0,     2,     4,     6,
-      10,    10,     0,     1,     0,    11,     8,     9
+       0,     5,     6,     7,     9,     0,    10,     0,     2,     3,
+       4,    10,     0,     1,    11,     8
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,     8,     0
+      -4,    -4,     6,    -4,    -2
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     6,    11,    12
+      -1,     7,    11,     9,    12
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -597,35 +601,35 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     2,     3,     4,     5,     8,     9,    13,     7,    10,
-      14,    15,    16,    17
+       1,     2,     3,     4,     5,     6,     8,    13,    15,    14,
+       0,    10
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     4,     5,     6,     7,     3,     4,     0,     0,     7,
-      10,    11,     8,     8
+       3,     4,     5,     6,     7,     8,     0,     0,     9,    11,
+      -1,     5
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     4,     5,     6,     7,    11,    12,     3,     4,
-       7,    12,    13,     0,    13,    13,     8,     8
+       0,     3,     4,     5,     6,     7,     8,    12,    13,    14,
+      13,    13,    15,     0,    15,     9
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    10,    11,    12,    12,    12,    12,    12,    12,    12,
-      13,    13
+       0,    11,    12,    13,    13,    14,    14,    14,    14,    14,
+      15,    15
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     1,     2,     1,     3,     4,
+       0,     2,     1,     1,     2,     1,     1,     1,     3,     1,
        0,     2
 };
 
@@ -1324,83 +1328,88 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 50 "lisp.y"
+#line 54 "lisp.y"
              {
 			*result = *(obj_t *)&(yyvsp[0].any);
-			listify(result, result->type == LIST);
+			listify(result, 0);
 			YYACCEPT;
 		}
-#line 1334 "C_LISP_Interpreter/lisp.tab.c"
+#line 1338 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 3:
-#line 58 "lisp.y"
-                   { (yyval.any).number = (yyvsp[0].number); }
-#line 1340 "C_LISP_Interpreter/lisp.tab.c"
-    break;
-
-  case 4:
-#line 59 "lisp.y"
-                                { (yyval.any).number = (yyvsp[0].number); }
+#line 62 "lisp.y"
+                  {
+			(yyval.any) = (yyvsp[0].any);
+		}
 #line 1346 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
+  case 4:
+#line 65 "lisp.y"
+                          {
+			(yyval.any) = (yyvsp[0].any);
+			switch((yyval.any).type) {
+				case SYMBOL:
+					(yyval.any).type = LITSYMBOL;
+				break;
+				case CODE: case LIST:
+					(yyval.any).type = _EXPLICIT_LITERAL_LIST;
+				break;
+			}
+		}
+#line 1362 "C_LISP_Interpreter/lisp.tab.c"
+    break;
+
   case 5:
-#line 60 "lisp.y"
+#line 79 "lisp.y"
+                   { (yyval.any).number = (yyvsp[0].number); }
+#line 1368 "C_LISP_Interpreter/lisp.tab.c"
+    break;
+
+  case 6:
+#line 80 "lisp.y"
                      {
 			(yyval.any).symbol = (yyvsp[0].symbol);
 			(yyval.any).type = SYMBOL;
 		}
-#line 1355 "C_LISP_Interpreter/lisp.tab.c"
-    break;
-
-  case 6:
-#line 64 "lisp.y"
-                                {
-			(yyval.any).symbol = (yyvsp[0].symbol);
-			(yyval.any).type = LITSYMBOL;
-		}
-#line 1364 "C_LISP_Interpreter/lisp.tab.c"
+#line 1377 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 7:
-#line 68 "lisp.y"
-                  {
-			(yyval.any).type = NIL;
-		}
-#line 1372 "C_LISP_Interpreter/lisp.tab.c"
+#line 84 "lisp.y"
+                     { (yyval.any).string = (yyvsp[0].string); }
+#line 1383 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 8:
-#line 71 "lisp.y"
+#line 85 "lisp.y"
                                      {
 			(yyval.any).list = (yyvsp[-1].list);
 			if((yyvsp[-1].list).type != NIL)
 				(yyval.any).type = CODE;
 		}
-#line 1382 "C_LISP_Interpreter/lisp.tab.c"
+#line 1393 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 9:
-#line 76 "lisp.y"
-                                                {
-			(yyval.any).list = (yyvsp[-1].list);
-			if((yyvsp[-1].list).type != NIL)
-				(yyval.any).type = LIST;
+#line 90 "lisp.y"
+                  {
+			(yyval.any).type = NIL;
 		}
-#line 1392 "C_LISP_Interpreter/lisp.tab.c"
+#line 1401 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 10:
-#line 84 "lisp.y"
+#line 96 "lisp.y"
                {
 			(yyval.list).type = NIL;
 		}
-#line 1400 "C_LISP_Interpreter/lisp.tab.c"
+#line 1409 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
   case 11:
-#line 87 "lisp.y"
+#line 99 "lisp.y"
                     {
 			(yyval.list).type = LIST;
 			(yyval.list).value = malloc(sizeof(obj_t));
@@ -1411,11 +1420,11 @@ yyreduce:
 			} else
 				(yyval.list).next = NULL;
 		}
-#line 1415 "C_LISP_Interpreter/lisp.tab.c"
+#line 1424 "C_LISP_Interpreter/lisp.tab.c"
     break;
 
 
-#line 1419 "C_LISP_Interpreter/lisp.tab.c"
+#line 1428 "C_LISP_Interpreter/lisp.tab.c"
 
       default: break;
     }
@@ -1647,4 +1656,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 99 "lisp.y"
+#line 111 "lisp.y"

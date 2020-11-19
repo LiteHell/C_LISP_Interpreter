@@ -17,11 +17,13 @@ void listify(obj_t *const o, int force) {
 			if(force)
 				o->type = LITSYMBOL;
 		break;
+		case _EXPLICIT_LITERAL_LIST:
+			force = 1;
 		case CODE: case LIST:
 			if(force)
 				o->type = LIST;
 			listify(o->list.next, force);
-			listify(o->list.value, force || o->list.value->type == LIST);
+			listify(o->list.value, force);
 		break;
 	}
 }
@@ -35,6 +37,7 @@ void listify(obj_t *const o, int force) {
 
 %token <number> LEX_NUMBER
 %token <symbol> LEX_SYMBOL
+%token <string> LEX_STRING
 %token <list> LEX_NIL
 %token LEX_SQUOTE
 %token LEX_LPAREN
@@ -42,6 +45,7 @@ void listify(obj_t *const o, int force) {
 %token LEX_UNKNOWN
 
 %type <any> expr
+%type <any> pure_expr
 %type <list> list
 
 %%
@@ -49,34 +53,42 @@ void listify(obj_t *const o, int force) {
 root:
 	expr {
 			*result = *(obj_t *)&$1;
-			listify(result, result->type == LIST);
+			listify(result, 0);
 			YYACCEPT;
 		}
 	;
 
 expr:
+	pure_expr {
+			$$ = $1;
+		}
+	| LEX_SQUOTE expr {
+			$$ = $2;
+			switch($$.type) {
+				case SYMBOL:
+					$$.type = LITSYMBOL;
+				break;
+				case CODE: case LIST:
+					$$.type = _EXPLICIT_LITERAL_LIST;
+				break;
+			}
+		}
+	;
+
+pure_expr:
 	LEX_NUMBER { $$.number = $1; }
-	| LEX_SQUOTE LEX_NUMBER { $$.number = $2; }
 	| LEX_SYMBOL {
 			$$.symbol = $1;
 			$$.type = SYMBOL;
 		}
-	| LEX_SQUOTE LEX_SYMBOL {
-			$$.symbol = $2;
-			$$.type = LITSYMBOL;
-		}
-	| LEX_NIL {
-			$$.type = NIL;
-		}
+	| LEX_STRING { $$.string = $1; }
 	| LEX_LPAREN list LEX_RPAREN {
 			$$.list = $2;
 			if($2.type != NIL)
 				$$.type = CODE;
 		}
-	| LEX_SQUOTE LEX_LPAREN list LEX_RPAREN {
-			$$.list = $3;
-			if($3.type != NIL)
-				$$.type = LIST;
+	| LEX_NIL {
+			$$.type = NIL;
 		}
 	;
 

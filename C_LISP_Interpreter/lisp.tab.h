@@ -51,11 +51,12 @@ extern int yydebug;
   {
     LEX_NUMBER = 258,
     LEX_SYMBOL = 259,
-    LEX_NIL = 260,
-    LEX_SQUOTE = 261,
-    LEX_LPAREN = 262,
-    LEX_RPAREN = 263,
-    LEX_UNKNOWN = 264
+    LEX_STRING = 260,
+    LEX_NIL = 261,
+    LEX_SQUOTE = 262,
+    LEX_LPAREN = 263,
+    LEX_RPAREN = 264,
+    LEX_UNKNOWN = 265
   };
 #endif
 

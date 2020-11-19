@@ -6,11 +6,12 @@ obj_t: 단일 lisp 객체를 나타냅니다. 타입 정의는 parsedef.h에 있
 아래의 값 중 포인터인 것은 전부 동적할당이고 아직 free 로직을 구현하지 않았기
 때문에 메모리 누수가 납니다. 나중에 프로젝트가 좀 진전되면 추가할 예정입니다.
 
-- type_t .type: 객체의 타입을 나타냅니다. NUMBER, SYMBOL, LITSYMBOL, CODE, LIST,
-  NIL 중 하나입니다. obj_t가 union이기 때문에 이 값을 변경하면 같은 객체의 다른
-  .type도 전부 변경됩니다.
-  .type의 값에 따라 아래 3종류의 union 타입 중 하나만 접근해야 합니다. 단, NIL일
-  경우 모든 타입이 쓰레기 값을 가지며 사용해서는 안 됩니다. NIL은 빈 리스트와
+- type_t .type: 객체의 타입을 나타냅니다. NUMBER, SYMBOL, LITSYMBOL, STRING,
+  CODE, LIST, NIL(, bison 내부 처리용 _EXPLICIT_LITERAL_LIST) 중 하나입니다.
+  obj_t가 union이기 때문에 이 값을 변경하면 같은 객체의 다른 .type도
+  전부 변경되며, .number.type 등에도 반영할 필요가 없습니다.
+  .type의 값에 따라 아래 3종류의 union 멤버 중 하나만 접근해야 합니다. 단, NIL일
+  경우 모든 멤버가 쓰레기 값을 가지며 사용해서는 안 됩니다. NIL은 빈 리스트와
   문법적으로 같은 의미를 가집니다.
 
 - .number (.type = NUMBER)
@@ -22,6 +23,12 @@ obj_t: 단일 lisp 객체를 나타냅니다. 타입 정의는 parsedef.h에 있
 - .symbol (.type = SYMBOL or LITSYMBOL)
   - .type
   - char * .symbol: 입력한 심볼 이름을 나타냅니다.
+
+- .string (.type = STRING)
+  - .type
+  - char * .string: 입력한 문자열을 나타냅니다. 탈출 문자열 \a, \b, \f, \n, \r,
+    \t, \v를 지원하며(C와 의미가 같습니다), 이외의 \x꼴 문자열은 문자 x와
+	 같습니다. \n이 *아닌* 엔터 줄바꿈은 사용해서는 안 됩니다.
 
 - .list (.type = CODE or LIST)
   - .type
@@ -62,13 +69,16 @@ void lisp_debug(obj_t const* const result, int indent) {
 		printf(" ");
 	switch (result->type) {
 	case NUMBER:
-		printf("\"%s\" %f", result->number.literal, result->number.value);
+		printf("number \"%s\" %f", result->number.literal, result->number.value);
 		break;
 	case SYMBOL:
-		printf("\"%s\"", result->symbol.symbol);
+		printf("symbol %s", result->symbol.symbol);
 		break;
 	case LITSYMBOL:
-		printf("'\"%s\"", result->symbol.symbol);
+		printf("symbol '%s", result->symbol.symbol);
+		break;
+	case STRING:
+		printf("string \"%s\"", result->string.string);
 		break;
 	case CODE:
 		printf("(\n");
@@ -99,7 +109,7 @@ void lisp_debug(obj_t const* const result, int indent) {
 		printf(")");
 		break;
 	case NIL:
-		printf("NIL");
+		printf("nil");
 		break;
 	}
 }
