@@ -114,6 +114,61 @@ void lisp_debug(obj_t const* const result, int indent) {
 	}
 }
 
+void lisp_pretty(obj_t const* const result) {
+	switch (result->type) {
+	case NUMBER:
+		printf("%s", result->number.literal);
+		break;
+	case SYMBOL:
+		printf("%s", result->symbol.symbol);
+		break;
+	case LITSYMBOL:
+		printf("'%s", result->symbol.symbol);
+		break;
+	case STRING:
+		printf("\"%s\"", result->string.string);
+		break;
+	case CODE:
+		printf("(");
+		{
+			obj_t const* ptr = result;
+			bool firstLoop = true;
+			while (ptr) {
+				if (firstLoop) {
+					firstLoop = false;
+				}
+				else {
+					printf(" ");
+				}
+				lisp_pretty(ptr->list.value);
+				ptr = ptr->list.next;
+			}
+		}
+		printf(")");
+		break;
+	case LIST:
+		printf("'(");
+		{
+			obj_t const* ptr = result;
+			bool firstLoop = true;
+			while (ptr) {
+				if (firstLoop) {
+					firstLoop = false;
+				}
+				else {
+					printf(" ");
+				}
+				lisp_pretty(ptr->list.value);
+				ptr = ptr->list.next;
+			}
+		}
+		printf(")");
+		break;
+	case NIL:
+		printf("nil");
+		break;
+}
+}
 int main() {
 #ifdef PARSER_DEBUG
 	// Debug-purpose code
@@ -132,7 +187,11 @@ int main() {
 	while (1) {
 		if (!yyparse(&result)) {
 			result = evaluateObject(&result);
+#if _DEBUG
 			lisp_debug(&result, 0);
+#else
+			lisp_pretty(&result);
+#endif
 			printf("\n");
 		}
 	}
