@@ -3,7 +3,11 @@
 
 obj_t fn_atom(obj_t* pObj)
 {
-
+	obj_t a = evaluateObject(pObj->list.value);
+	if (a.type == SYMBOL)
+		return create_t();
+	else
+		return create_nil();
 }
 
 obj_t fn_null(obj_t* pObj)
@@ -115,7 +119,11 @@ obj_t fn_lessOrEqualThan(obj_t* pObj)
 
 }
 
-obj_t fn_stringp(obj_t pObj)
+obj_t fn_stringp(obj_t* pObj)
 {
-
+	obj_t a = evaluateObject(pObj->list.value);
+	if (a.type == STRING)
+		return create_t();
+	else
+		return create_nil();
 }
