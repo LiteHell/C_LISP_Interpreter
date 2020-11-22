@@ -739,7 +739,7 @@ YY_RULE_SETUP
 		// number is {digit}+(\.{digit}*)? or \.{digit}+
 
 		double val = 0, sub = 1;
-		int number = 0, period = 0;
+		int number = 0, period = 0, minus = 0;
 		char *const lit = malloc((yyleng + 1)*sizeof(char));
 		for(int i = 0; yytext[i]; i++)
 			lit[i] = toupper(yytext[i]);
@@ -751,22 +751,31 @@ YY_RULE_SETUP
 			return LEX_NIL;
 		}
 
-		for(int i = 0; yytext[i]; i++) {
-			if(yytext[i] == '.') {
-				if(period)
-					goto L_SYMBOL;
-				period = 1;
-			} else if(yytext[i] >= '0' && yytext[i] <= '9') {
-				int digit = yytext[i] - '0';
-				number = 1;
-				if(period) {
-					sub /= 10;
-					val += sub*digit;
-				} else
-					val = 10*val + digit;
-			} else
-				goto L_SYMBOL;
-		}
+		for(int i = 0; yytext[i]; i++)
+			switch(yytext[i]) {
+				case '-':
+					if(i || minus == 1)
+						goto L_SYMBOL;
+					minus = 1;
+				break;
+				case '.':
+					if(period)
+						goto L_SYMBOL;
+					period = 1;
+				break;
+				default:
+					if(yytext[i] >= '0' && yytext[i] <= '9') {
+						int digit = yytext[i] - '0';
+						number = 1;
+						if(period) {
+							sub /= 10;
+							val += sub*digit;
+						} else
+							val = 10*val + digit;
+					} else
+						goto L_SYMBOL;
+					break;
+				}
 
 		if(number)
 			goto L_NUMBER;
@@ -779,13 +788,13 @@ YY_RULE_SETUP
 	L_NUMBER:
 		yylval.type = NUMBER;
 		yylval.number.literal = lit;
-		yylval.number.value = val;
+		yylval.number.value = minus ? -val : val;
 		return LEX_NUMBER;
 	}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 62 "lisp.l"
+#line 71 "lisp.l"
 {
 		// string literal
 		// supported escapes are \" \\ \a \b \f \n \r \t \v
@@ -826,36 +835,36 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 99 "lisp.l"
+#line 108 "lisp.l"
 { return LEX_SQUOTE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 100 "lisp.l"
+#line 109 "lisp.l"
 { return LEX_LPAREN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 101 "lisp.l"
+#line 110 "lisp.l"
 { return LEX_RPAREN; }
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 102 "lisp.l"
+#line 111 "lisp.l"
 {}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 103 "lisp.l"
+#line 112 "lisp.l"
 { return LEX_UNKNOWN; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 104 "lisp.l"
+#line 113 "lisp.l"
 ECHO;
 	YY_BREAK
-#line 859 "C_LISP_Interpreter/lisp.yy.c"
+#line 868 "C_LISP_Interpreter/lisp.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1860,5 +1869,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 104 "lisp.l"
+#line 113 "lisp.l"
 

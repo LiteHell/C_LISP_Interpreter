@@ -16,7 +16,7 @@ tokenchar [!#-&*-~]
 		// number is {digit}+(\.{digit}*)? or \.{digit}+
 
 		double val = 0, sub = 1;
-		int number = 0, period = 0;
+		int number = 0, period = 0, minus = 0;
 		char *const lit = malloc((yyleng + 1)*sizeof(char));
 		for(int i = 0; yytext[i]; i++)
 			lit[i] = toupper(yytext[i]);
@@ -28,22 +28,31 @@ tokenchar [!#-&*-~]
 			return LEX_NIL;
 		}
 
-		for(int i = 0; yytext[i]; i++) {
-			if(yytext[i] == '.') {
-				if(period)
-					goto L_SYMBOL;
-				period = 1;
-			} else if(yytext[i] >= '0' && yytext[i] <= '9') {
-				int digit = yytext[i] - '0';
-				number = 1;
-				if(period) {
-					sub /= 10;
-					val += sub*digit;
-				} else
-					val = 10*val + digit;
-			} else
-				goto L_SYMBOL;
-		}
+		for(int i = 0; yytext[i]; i++)
+			switch(yytext[i]) {
+				case '-':
+					if(i || minus == 1)
+						goto L_SYMBOL;
+					minus = 1;
+				break;
+				case '.':
+					if(period)
+						goto L_SYMBOL;
+					period = 1;
+				break;
+				default:
+					if(yytext[i] >= '0' && yytext[i] <= '9') {
+						int digit = yytext[i] - '0';
+						number = 1;
+						if(period) {
+							sub /= 10;
+							val += sub*digit;
+						} else
+							val = 10*val + digit;
+					} else
+						goto L_SYMBOL;
+					break;
+				}
 
 		if(number)
 			goto L_NUMBER;
@@ -56,7 +65,7 @@ tokenchar [!#-&*-~]
 	L_NUMBER:
 		yylval.type = NUMBER;
 		yylval.number.literal = lit;
-		yylval.number.value = val;
+		yylval.number.value = minus ? -val : val;
 		return LEX_NUMBER;
 	}
 \"(\\.|[^"\n\\])*\" {

@@ -1,71 +1,85 @@
 #include "lisp_processor.h"
 #include "lisp_processor_functions.h"
+#include "lisp_processor_utils.h"
 #include "c_dictionary.h"
 #include <string.h>
 #include <ctype.h>
 
 typedef obj_t (*processorFunction)(obj_t* pObj);
 
+// LISP function dictionary
 const char* funcNames[LISP_FUNC_COUNT] = { LISP_FUNC_NAMES };
 processorFunction funcs[LISP_FUNC_COUNT] = { LISP_FUNCS };
+// symbol-to-variable dictionary
 C_DICTIONARY* symbolsDict;
 
+// prepare variable dictionary
 void initializeProcessor()
 {
 	symbolsDict = dict_create();
 }
 
+// discard variable dictionary
 void freeProcessor()
 {
 	dict_free(symbolsDict);
 }
 
+// check if str matches /c[ad]*r/
 bool is_cadr_string(char* str) {
 	if (strlen(str) < 3)
 		return false;
-	if (str[0] != 'c' && str[0] != 'C')
+	if (str[0] != 'C')
 		return false;
 
 	char c;
-	while (c = tolower(*(++str))) {
-		if (c == 'r')
-			return *(++str) == '\0';
-		else if (c != 'a' && c != 'd')
+	while(1)
+		switch (*++str) {
+		case 'R':
+			return *++str == '\0';
+		default: // can handle early \0
 			return false;
-	}
-	return false;
+		case 'A': case 'D':
+			break;
+		}
 }
 
+// evaluate given object
 obj_t evaluateObject(const obj_t* pObj) {
 	obj_t result = *pObj;
 	switch (pObj->type) {
 	case CODE: {
-		string_t funcName = pObj->list.value->symbol.symbol;
-		for (int i = 0; i < LISP_FUNC_COUNT; i++) {
-			// Handle car and cdr separately
-			if (is_cadr_string(funcName)) {
-				char* c = funcName + strlen(funcName) - 1;
-				result = *result.list.next->list.value;
-				while (tolower(*(--c)) != 'c') {
-					if (tolower(*c) == 'a')
-						result = fn_car(&result);
-					else if (tolower(*c) == 'd')
-						result = fn_cdr(&result);
-				}
-				return result;
-			}
+		string_t funcName = pObj->list.value->symbol.symbol; // TODO: raise exception
 
-			// All symbols are uppercased, so no need of case insensitive strcmp
-			if (strcmp(funcName, funcNames[i]) == 0) {
-				obj_t parameters = *pObj->list.next;
-				parameters.type = LIST;
-				return (funcs[i](&parameters));
+		// Handle car and cdr separately
+		if (is_cadr_string(funcName)) {
+			char* c = funcName + strlen(funcName) - 1; // points to 'R'
+			if (result.list.next == NULL)
+				result = create_error();
+			result = *result.list.next->list.value;
+			while(1)
+				switch (*--c) {
+				case 'C':
+					return result;
+				case 'A':
+					result = fn_car(&result);
+					break;
+				case 'D':
+					result = fn_cdr(&result);
+					break;
+				}
+		}
+		else {
+			for (int i = 0; i < LISP_FUNC_COUNT; i++) {
+				if (strcmp(funcName, funcNames[i]) == 0) { // function lookup
+					return funcs[i](pObj->list.next);
+				}
 			}
 		}
+
 		obj_t newVal = *pObj;
 		newVal.type = LIST;
 		return evaluateObject(&newVal);
-		break;
 	}
 	case LIST: {
 		obj_t* list = &result;
@@ -95,4 +109,3 @@ obj_t evaluateObject(const obj_t* pObj) {
 	}
 	return result;
 }
-

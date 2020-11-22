@@ -221,13 +221,17 @@
     <ClCompile Include="lisp.tab.c" />
     <ClCompile Include="lisp.yy.c" />
     <ClCompile Include="lisp_processor.c" />
-    <ClCompile Include="lisp_processor_function_conditional.c" />
+    <ClCompile Include="lisp_processor_function_conditional.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="list.c" />
     <ClCompile Include="predicate.c" />
     <ClCompile Include="symbol.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lisp_processor_functions_conditional.h" />
+    <ClInclude Include="lisp_processor_functions_conditional.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="lisp_processor_functions_control.h" />
     <ClInclude Include="lisp_processor_functions_predicate.h" />
     <ClInclude Include="lisp_processor_utils.h" />
