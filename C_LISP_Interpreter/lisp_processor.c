@@ -49,7 +49,9 @@ obj_t evaluateObject(const obj_t* pObj) {
 	obj_t result = *pObj;
 	switch (pObj->type) {
 	case CODE: {
-		string_t funcName = pObj->list.value->symbol.symbol; // TODO: raise exception
+		if (pObj->list.value == NULL || pObj->list.value->type != SYMBOL)
+			return create_error();
+		string_t funcName = pObj->list.value->symbol.symbol;
 
 		// Handle car and cdr separately
 		if (is_cadr_string(funcName)) {
