@@ -7,7 +7,6 @@
 C_DICTIONARY* dict_create()
 {
 	C_DICTIONARY* dict = malloc(sizeof(C_DICTIONARY));
-	dict->count = 0;
 	dict->firstNode = NULL;
 	return dict;
 }
@@ -15,7 +14,7 @@ C_DICTIONARY* dict_create()
 // free a dictionary
 void dict_free(C_DICTIONARY* dict)
 {
-	if (dict->count != 0) {
+	if (dict->firstNode != NULL) {
 		C_DICTIONARY_NODE* node = dict->firstNode;
 		while (node != NULL) {
 			C_DICTIONARY_NODE* nextNode = node->nextNode;
@@ -35,29 +34,31 @@ void dict_insert(C_DICTIONARY* dict, char* key, obj_t* obj)
 	curNode->key = malloc(sizeof(char) * (strlen(key) + 1));
 	strcpy(curNode->key, key);
 
-	if (dict->count == 0) {
+	if (dict->firstNode == NULL) {
 		dict->firstNode = curNode;
 	}
 	else {
 		C_DICTIONARY_NODE* node = dict->firstNode;
-		while (node != NULL) {
-			if (strcmp(curNode->key, key) == 0) {
+		while (true) {
+			if (strcmp(node->key, key) == 0) {
 				node->object = curNode->object;
 				free(curNode->key);
 				free(curNode);
 				return;
 			}
+			if (node->nextNode == NULL) {
+				node->nextNode = curNode;
+				return;
+			}
 			node = node->nextNode;
 		}
-		node->nextNode = curNode;
 	}
-	dict->count++;
 }
 
 // checks if dictionary has given key
 bool dict_has(C_DICTIONARY* dict, char* key)
 {
-	if (dict->count == 0)
+	if (dict->firstNode == NULL)
 		return false;
 	C_DICTIONARY_NODE* node = dict->firstNode;
 	while (node != NULL) {
@@ -71,7 +72,7 @@ bool dict_has(C_DICTIONARY* dict, char* key)
 // retrieves a value corresponding to given key
 obj_t dict_get(C_DICTIONARY* dict, char* key)
 {
-	if (dict->count == 0) {
+	if (dict->firstNode == NULL) {
 		perror("Empty dictionary");
 		exit(1);
 		return;

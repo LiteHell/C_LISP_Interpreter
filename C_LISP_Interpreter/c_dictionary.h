@@ -11,7 +11,6 @@ typedef struct {
 } C_DICTIONARY_NODE;
 
 typedef struct {
-	int count;
 	C_DICTIONARY_NODE* firstNode;
 
 } C_DICTIONARY;
