@@ -40,7 +40,7 @@ void dict_insert(C_DICTIONARY* dict, char* key, obj_t* obj)
 	}
 	else {
 		C_DICTIONARY_NODE* node = dict->firstNode;
-		while (node->nextNode != NULL) {
+		while (node != NULL) {
 			if (strcmp(curNode->key, key) == 0) {
 				node->object = curNode->object;
 				free(curNode->key);
