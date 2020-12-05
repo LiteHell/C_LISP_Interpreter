@@ -305,7 +305,10 @@ obj_t fn_subst(obj_t* pObj)
 		return create_error();
 
 	// 매개변수 평가 및 유형 검증
-	obj_t newValue = evaluateObject(pObj->list.value);
+	obj_t* newValue = malloc(sizeof(obj_t));
+	if (newValue == NULL)
+		return create_error();
+	*newValue = evaluateObject(pObj->list.value);
 	obj_t oldValue = evaluateObject(pObj->list.next->list.value);
 	obj_t evaluatedList = evaluateObject(pObj->list.next->list.next->list.value);
 	if (evaluatedList.type == NIL)
@@ -320,7 +323,7 @@ obj_t fn_subst(obj_t* pObj)
 	for (obj_t* now = &evaluatedList; now != NULL; now = now->list.next) {
 		obj_t* target = now->list.value;
 		if (obj_equals(now->list.value, &oldValue))
-			target = &newValue;
+			target = newValue;
 		if (newList == NULL) {
 			newList = makeListWithValue(target);
 			if (newList == NULL)
